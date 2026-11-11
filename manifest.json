@@ -2,13 +2,13 @@
   "specVersion": "1.1",
   "type": "stdin",
   "name": "dp-it-normativa-grab",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Downloads the Normattiva multivigente AKN export (nuova-ricerca, conferma, check-status, 303 location) of the given acts into <dir>/<actId>.zip with a sidecar <actId>.act.json for the convert class.",
   "author": "open-lex-it",
   "authentication": false,
   "actions": {
     "execute": {
-      "description": "For each item {key, meta{kind, actId, ...}} fetch the act (normattiva: export zip plus .act.json; gu: print HTML plus .meta.json, one request per act paced at 1.5 s) and write the files atomically. Every item is tried; if any failed the run ends with an error (config_error if any failure is a config error, else transient_error) listing the failed keys. dryRun makes no request and writes nothing.",
+      "description": "For each item fetch the act (normattiva: zip + .act.json; gu: HTML + .meta.json, paced 1.5 s) and write atomically. Failed keys end the run with an error. dryRun: no request, no write.",
       "input": {
         "type": "object",
         "properties": {
