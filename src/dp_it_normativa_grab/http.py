@@ -5,8 +5,8 @@ import httpx
 
 from dp_it_normativa_grab.errors import CONFIG_ERROR, GrabError
 
-# api: the BFF; export: where the finished export zip is served (x-ipzs-location)
-DEFAULT_ALLOWED_HOSTS: tuple[str, ...] = ("api.normattiva.it", "export.normattiva.it")
+# api: the BFF; export: where the finished export zip is served (x-ipzs-location); www.gazzettaufficiale.it: the print of the GU acts
+DEFAULT_ALLOWED_HOSTS: tuple[str, ...] = ("api.normattiva.it", "export.normattiva.it", "www.gazzettaufficiale.it")
 TIMEOUT_SEC = 60.0
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 
