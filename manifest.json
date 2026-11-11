@@ -2,13 +2,13 @@
   "specVersion": "1.1",
   "type": "stdin",
   "name": "dp-it-normativa-grab",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Downloads the Normattiva multivigente AKN export (nuova-ricerca, conferma, check-status, 303 location) of the given acts into <dir>/<actId>.zip with a sidecar <actId>.act.json for the convert class.",
   "author": "open-lex-it",
   "authentication": false,
   "actions": {
     "execute": {
-      "description": "For each item {key, meta{kind, actId, denominazione, anno, numero}} run the export and write the zip and sidecar atomically. Every item is tried; if any failed the run ends with an error (config_error if any failure is a config error, else transient_error) listing the failed keys. dryRun makes no request and writes nothing.",
+      "description": "For each item {key, meta{kind, actId, ...}} fetch the act (normattiva: export zip plus .act.json; gu: print HTML plus .meta.json, one request per act paced at 1.5 s) and write the files atomically. Every item is tried; if any failed the run ends with an error (config_error if any failure is a config error, else transient_error) listing the failed keys. dryRun makes no request and writes nothing.",
       "input": {
         "type": "object",
         "properties": {
@@ -23,13 +23,16 @@
                 "meta": {
                   "type": "object",
                   "properties": {
-                    "kind": { "const": "normattiva" },
+                    "kind": { "enum": ["normattiva", "gu"] },
                     "actId": { "type": "string" },
-                    "denominazione": { "type": "string" },
+                    "denominazione": { "type": "string", "description": "normattiva items" },
                     "anno": { "type": "integer" },
-                    "numero": { "type": "integer" }
+                    "numero": { "type": "integer" },
+                    "dataGU": { "type": "string", "description": "gu items: Gazzetta publication date YYYY-MM-DD" },
+                    "codiceRedazionale": { "type": "string", "description": "gu items: codice redazionale, names the files" },
+                    "vigenza": { "type": "string", "description": "gu items, optional: vigenza date YYYY-MM-DD (default today)" }
                   },
-                  "required": ["kind", "actId", "denominazione", "anno", "numero"]
+                  "required": ["kind", "actId"]
                 }
               },
               "required": ["key", "meta"]
@@ -37,7 +40,7 @@
           },
           "dir": { "type": "string", "description": "directory to download into" },
           "dryRun": { "type": "boolean", "description": "plan only: no request, nothing written" },
-          "allowedHosts": { "type": "array", "items": { "type": "string" }, "description": "hosts the class may call (default api.normattiva.it, export.normattiva.it)" }
+          "allowedHosts": { "type": "array", "items": { "type": "string" }, "description": "hosts the class may call (default api.normattiva.it, export.normattiva.it, www.gazzettaufficiale.it)" }
         },
         "required": ["items", "dir"]
       },
